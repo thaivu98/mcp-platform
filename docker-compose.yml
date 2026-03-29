@@ -3,31 +3,29 @@ services:
     image: mysql:8
     container_name: mcp_mysql_db
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root_mcp_pass_2026
-      MYSQL_DATABASE: personal_mcp
-      MYSQL_USER: mcp_user
-      MYSQL_PASSWORD: mcp_user_pass_2026
+    env_file: .env
     ports:
       - "3307:3306"
     volumes:
       - ./mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   web:
     build: .
     container_name: personal-mcp-web
     restart: always
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./src:/app
     ports:
       - "8000:8000"
-    environment:
-      - DEBUG=1
-      - DB_NAME=personal_mcp
-      - DB_USER=mcp_user
-      - DB_PASSWORD=mcp_user_pass_2026
-      - DB_HOST=db
-      - DB_PORT=3306
+    env_file: .env
     depends_on:
-      - db
+      db:
+        condition: service_healthy

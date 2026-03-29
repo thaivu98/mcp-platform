@@ -1,0 +1,23 @@
+# Environment
+.env
+
+# Database
+mysql_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env/
+
+# Django
+db.sqlite3
+static/
+staticfiles/
+media/
+
+# OS
+.DS_Store
+Thumbs.db

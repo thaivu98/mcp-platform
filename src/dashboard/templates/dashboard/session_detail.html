@@ -22,8 +22,19 @@
                         <dd class="text-sm text-slate-200 mt-1 font-mono">{{ session.end_time|date:"Y-m-d H:i:s"|default:"Active" }}</dd>
                     </div>
                     <div>
-                        <dt class="text-[10px] text-slate-500 uppercase tracking-widest">Summary</dt>
-                        <dd class="text-sm text-slate-400 mt-2 italic">" {{ session.summary|default:"No completion summary provided." }} "</dd>
+                        <dt class="text-[10px] text-slate-500 uppercase tracking-widest">Token Metrics</dt>
+                        <dd class="mt-2 space-y-2">
+                            <div class="flex justify-between items-center bg-white/5 p-2 rounded-lg">
+                                <span class="text-[10px] text-slate-400 font-bold uppercase">Used</span>
+                                <span class="text-sm font-bold text-white">{{ session.total_tokens_used }} <span class="text-[8px] text-slate-500">tkn</span></span>
+                            </div>
+                            {% if session.total_tokens_saved > 0 %}
+                            <div class="flex justify-between items-center bg-emerald-500/10 p-2 rounded-lg border border-emerald-500/20">
+                                <span class="text-[10px] text-emerald-500 font-bold uppercase">Saved</span>
+                                <span class="text-sm font-bold text-emerald-400">{{ session.total_tokens_saved }} <span class="text-[8px] text-emerald-700">tkn</span></span>
+                            </div>
+                            {% endif %}
+                        </dd>
                     </div>
                 </dl>
             </div>
@@ -54,8 +65,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="ml-6 text-right">
+                             <div class="ml-6 flex flex-col items-end space-y-2">
                                 <span class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400 font-bold tracking-widest border border-white/5">{{ log.latency_ms }}ms</span>
+                                <div class="flex flex-col items-end">
+                                    <span class="text-[8px] text-slate-500 uppercase font-bold">Usage</span>
+                                    <span class="text-xs font-mono text-white">{{ log.tokens_input|add:log.tokens_output }} <span class="text-[8px] text-slate-600">tkn</span></span>
+                                </div>
+                                {% if log.tokens_saved > 0 %}
+                                <div class="flex flex-col items-end">
+                                    <span class="text-[8px] text-emerald-500 uppercase font-bold">Saved</span>
+                                    <span class="text-xs font-mono text-emerald-400">+{{ log.tokens_saved }} <span class="text-[8px] text-emerald-700">tkn</span></span>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

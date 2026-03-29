@@ -1,117 +1,43 @@
-# 🌽 Personal MCP Intelligence Platform (Django + MySQL Edition)
+# 🌽 Personal MCP Intelligence Platform
 
-> Surgical code intelligence. Semantic memory. Analytics Dashboard.  
-> **Stop burning tokens.** Start managing your AI tools with a premium personal hub.
+A high-performance Model Context Protocol (MCP) server integrated with a Django-powered analytics dashboard. Designed to provide deep insights into AI tool interactions, memory efficiency, and token economics.
 
----
+## 🚀 Key Features
 
-## 🌟 Overview
+- **Intelligence Dashboard**: Real-time monitoring of every AI tool call, including inputs, outputs, and latency.
+- **Token Intelligence**: 
+  - **Usage Tracking**: Automatically estimates and logs token consumption for all MCP activities.
+  - **Context Efficiency**: New "Context Saved" metric that visualizes the savings achieved by using MCP-based targeted retrieval instead of context-stuffing.
+  - **Chat Tracking**: Integrated `record_conversation` tool to include general chat costs in your analytics.
+- **Session Explorer**: Dedicated page to manage and analyze past interactions with full history, search, and efficiency metrics.
+- **Memory & Knowledge**: Persistent storage for long-term AI memory and structured knowledge base access.
+- **Automated Lifecycle**: Self-cleaning session logic that detects and resolves stale connections on server restart.
 
-**Personal MCP** is a lightweight yet powerful Model Context Protocol (MCP) server and real-time analytics dashboard. Inspired by CornMCP but rebuilt for Python/Django enthusiasts, it gives your AI agents (Cursor, Claude, Antigravity) a structured memory and a high-end monitoring interface.
+## 🛠 Tech Stack
 
-### Key Features
-- 🧠 **Persistent Memory** — AI remembers context across sessions via MySQL.
-- 📊 **Premium Dashboard** — Glassmorphic, dark-mode UI to track every tool call and latency.
-- 📋 **Session Tracking** — Group activities into sessions to measure "token efficiency".
-- 💾 **Native MySQL 8** — Industrial-grade data persistence via Docker.
-- ⚡ **FastMCP Engine** — Built on top of Anthropic's high-level Python SDK.
+- **Backend**: Django 5.0+, Python 3.12
+- **Database**: MySQL 8.0 (Dockerized)
+- **MCP Framework**: FastMCP
+- **UI/UX**: TailwindCSS with specialized Glassmorphism & Gold/Emerald accents.
 
----
+## 🏃 Running the Platform
 
-## 🏗️ Project Structure
+1.  **Start Services**:
+    ```bash
+    docker-compose up -d
+    ```
+2.  **Access Dashboard**: Open `http://localhost:8000` in your browser.
+3.  **MCP Connection**: Use the following command in your MCP-compatible IDE:
+    ```bash
+    docker exec -i personal-mcp-web python manage.py run_mcp
+    ```
 
-```text
-personal-mcp-django/
-├── docker-compose.yml    # Orchestrates MySQL 8 & Django Web
-├── Dockerfile            # Python 3.12 environment with MCP SDK
-├── requirements.txt      # Django, mysqlclient, mcp...
-├── mysql_data/           # Persistent MySQL storage (Mounted volume)
-└── src/                  # Django Source Code
-    ├── manage.py
-    ├── mymcp/            # Core Settings & URLs
-    ├── mcp_server/       # MCP logic & Database Models
-    │   ├── management/commands/run_mcp.py  # The MCP Server Entry Point
-    │   └── models.py     # SQL Schema (Sessions, Logs, Memory, Knowledge)
-    └── dashboard/        # Analytics UI (Glassmorphic Templates)
-        ├── templates/    # Tailwind CSS + Django Templates
-        └── views.py      # Real-time telemetry processing
-```
+## 📊 Analytics & Insights
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- **Docker** & **Docker Compose** installed.
-- An IDE that supports MCP (Cursor, VS Code with Antigravity, etc.).
-
-### 1. Installation
-Clone the repository and spin up the containers:
-
-```bash
-cd personal-mcp-django
-docker compose up -d
-```
-
-### 2. Initialization
-Run migrations to set up the MySQL schema and create a superuser for the Admin panel:
-
-```bash
-docker compose exec web python manage.py migrate
-docker compose exec web python manage.py createsuperuser
-```
-
-### 3. Accessing the Platform
-- **Dashboard:** [http://localhost:8000/](http://localhost:8000/)
-- **Django Admin:** [http://localhost:8000/admin/](http://localhost:8000/admin/) (Manage your Knowledge/Memory manually)
-- **MySQL Direct:** `localhost:3307` (See `docker-compose.yml` for credentials)
+The metrics you see on the dashboard help you understand your AI usage:
+- **Tokens Used**: Direct cost associated with the session.
+- **Context Saved**: How much data was managed via MCP instead of sent to the LLM.
+- **Efficiency (%)**: A ratio calculated by `Saved / (Used + Saved)`. The higher this number, the more optimized your AI context management is!
 
 ---
-
-## 🤖 IDE Integration (MCP Config)
-
-To connect your AI agent to this server, add the following to your MCP configuration file (e.g., `antigravity-mcp.json` or Cursor Settings):
-
-```json
-{
-  "mcpServers": {
-    "personal-mcp": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "personal-mcp-web",
-        "python",
-        "manage.py",
-        "run_mcp"
-      ]
-    }
-  }
-}
-```
-
----
-
-## 🔧 Available Tools
-
-| Tool | Category | Description |
-|---|---|---|
-| `session_start` | Session | Begins a tracked work session for the agent. |
-| `session_end` | Session | Ends session and logs a final summary to MySQL. |
-| `memory_store` | Memory | Saves content/snippets for cross-task recall. |
-| `memory_search` | Memory | Keyword search across all stored agent memories. |
-| `knowledge_list` | Knowledge | Lists all pre-defined bug-fix patterns or rules. |
-| `get_system_stats`| System | Returns CPU/RAM usage of the host server. |
-
----
-
-## 🎨 Dashboard Aesthetics
-The system uses a custom **Glassmorphism** design system:
-- **Dark Mode:** Deep slate palette (`slate-950`).
-- **Gradients:** Amber/Gold accents for high-end intelligence feel.
-- **Responsiveness:** Built with Tailwind CSS for seamless viewing on dev monitors.
-
----
-
-## 📄 License
-MIT © 2026 Personal MCP Intelligence Platform.
+*Created by Antigravity - Your Agentic AI Coding Assistant.*

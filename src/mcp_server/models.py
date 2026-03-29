@@ -7,6 +7,8 @@ class Session(models.Model):
     end_time = models.DateTimeField(null=True, blank=True)
     summary = models.TextField(blank=True)
     status = models.CharField(max_length=50, default='active') # active, completed, cancelled
+    total_tokens_used = models.IntegerField(default=0)
+    total_tokens_saved = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.name} ({self.status})"
@@ -19,6 +21,9 @@ class ToolLog(models.Model):
     output_data = models.TextField(blank=True)
     latency_ms = models.IntegerField(default=0)
     status = models.CharField(max_length=20, default='success') # success, error
+    tokens_input = models.IntegerField(default=0)
+    tokens_output = models.IntegerField(default=0)
+    tokens_saved = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.timestamp} - {self.tool_name}"

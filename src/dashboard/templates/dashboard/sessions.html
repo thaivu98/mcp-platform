@@ -1,0 +1,90 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="px-4 sm:px-0">
+    <div class="flex items-end justify-between mb-10">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">Session <span class="gradient-text tracking-tighter">Explorer</span></h1>
+            <p class="mt-2 text-sm text-slate-400">Manage and analyze all past MCP intelligence sessions.</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <form method="GET" action="{% url 'session_list' %}" class="relative">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search sessions..." 
+                    class="bg-slate-900 border border-white/5 rounded-2xl py-2 pl-4 pr-10 text-sm text-white focus:outline-none focus:border-amber-500/50 transition-colors w-64 glass">
+                <button type="submit" class="absolute right-3 top-2.5 text-slate-500 hover:text-amber-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </form>
+            <div class="glass px-4 py-2 rounded-2xl">
+                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ total_sessions }} Sessions</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Sessions Highlight -->
+    <div class="space-y-4">
+        {% for session in sessions %}
+        <div class="glass p-6 rounded-3xl hover:border-amber-500/20 transition-all group border border-white/5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        {% if session.status == 'active' %}
+                        <span class="flex h-3 w-3 rounded-full bg-green-500 animate-pulse border-2 border-slate-950"></span>
+                        {% else %}
+                        <span class="flex h-3 w-3 rounded-full bg-red-500/40 border-2 border-slate-950"></span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <a href="{% url 'session_detail' session.pk %}" class="text-xl font-semibold text-white group-hover:text-amber-400 transition-colors block">
+                            {{ session.name }}
+                        </a>
+                        <div class="flex items-center space-x-4 mt-1">
+                            <span class="text-[10px] text-slate-500 uppercase tracking-widest">{{ session.start_time|date:"Y-m-d H:i" }}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded border border-white/5 bg-slate-900 text-slate-400 uppercase tracking-widest">{{ session.status }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <div class="text-right">
+                        <p class="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-1">Total Usage</p>
+                        <p class="text-lg font-bold text-white">{{ session.total_tokens_used }} <span class="text-xs text-slate-500 font-normal">tkn</span></p>
+                    </div>
+                    
+                    {% if session.total_tokens_saved > 0 %}
+                    <div class="text-right border-l border-white/5 pl-8">
+                        <p class="text-[10px] text-emerald-500 uppercase font-bold tracking-widest mb-1">Efficiency Match</p>
+                        <p class="text-lg font-bold text-emerald-400">+{{ session.total_tokens_saved }} <span class="text-xs text-emerald-600 font-normal">saved</span></p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="pl-8">
+                        <a href="{% url 'session_detail' session.pk %}" 
+                           class="inline-flex items-center justify-center p-3 rounded-2xl bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-white transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            {% if session.summary %}
+            <div class="mt-4 pt-4 border-t border-white/5">
+                <p class="text-sm text-slate-400 italic font-light truncate max-w-2xl text-slate-500">
+                    " {{ session.summary }} "
+                </p>
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="py-20 text-center glass rounded-3xl border border-dashed border-white/10">
+            <div class="text-slate-600 mb-2">No sessions found matching your request.</div>
+            <a href="{% url 'session_list' %}" class="text-amber-500 text-sm hover:underline">Clear search filters</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

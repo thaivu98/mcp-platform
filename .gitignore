@@ -3,6 +3,7 @@
 
 # Database
 mysql_data/
+mysql_data
 
 # Python
 __pycache__/

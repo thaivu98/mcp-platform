@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default:"Personal MCP" }} | Corn-Inspired Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .premium-glow {
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.1);
+        }
+    </style>
+</head>
+<body class="h-full text-slate-200 antialiased selection:bg-amber-500/30">
+    <div class="min-h-full">
+        <!-- Navigation -->
+        <nav class="glass border-b border-white/5 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <span class="text-2xl font-bold gradient-text tracking-tighter">🌽 Personal-MCP</span>
+                        </div>
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="{% url 'index' %}" class="px-3 py-2 rounded-md text-sm font-medium hover:text-amber-400 transition-colors">Dashboard</a>
+                            <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Sessions</a>
+                            <a href="/admin/" class="px-3 py-2 rounded-md text-sm font-medium text-slate-400 hover:text-white transition-colors">Admin</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-[10px] text-amber-500 font-bold uppercase tracking-widest">Live: MySQL 8</div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="py-10">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        <footer class="mt-auto py-8 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 text-sm">
+                &copy; 2026 Personal MCP Intelligence Platform. Built with Django & MySQL.
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

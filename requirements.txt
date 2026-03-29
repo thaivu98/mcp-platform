@@ -1,0 +1,7 @@
+django>=5.0
+mysqlclient
+mcp
+python-dotenv
+psutil
+django-extensions
+tabulate

@@ -1,0 +1,70 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="px-4 sm:px-0">
+    <div class="flex items-center mb-8">
+        <a href="{% url 'index' %}" class="text-slate-400 hover:text-amber-500 mr-4 transition-colors">&larr; Back</a>
+        <h1 class="text-3xl font-bold tracking-tight text-white">{{ session.name }} <span class="text-slate-500 text-sm font-normal uppercase tracking-widest ml-4">{{ session.status }}</span></h1>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Session Info -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="glass p-6 rounded-3xl border border-white/5">
+                <h3 class="text-sm font-bold text-amber-500 uppercase tracking-widest mb-6">Session Data</h3>
+                <dl class="space-y-4">
+                    <div>
+                        <dt class="text-[10px] text-slate-500 uppercase tracking-widest">Start Time</dt>
+                        <dd class="text-sm text-slate-200 mt-1 font-mono">{{ session.start_time|date:"Y-m-d H:i:s" }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-[10px] text-slate-500 uppercase tracking-widest">End Time</dt>
+                        <dd class="text-sm text-slate-200 mt-1 font-mono">{{ session.end_time|date:"Y-m-d H:i:s"|default:"Active" }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-[10px] text-slate-500 uppercase tracking-widest">Summary</dt>
+                        <dd class="text-sm text-slate-400 mt-2 italic">" {{ session.summary|default:"No completion summary provided." }} "</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Tool Logs -->
+        <div class="lg:col-span-2">
+            <div class="glass rounded-3xl overflow-hidden border border-white/5">
+                <div class="px-6 py-4 border-b border-white/5 bg-slate-900/50 flex items-center justify-between">
+                    <h3 class="text-sm font-bold text-slate-200 uppercase tracking-widest">Timeline of Activity</h3>
+                    <span class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">{{ logs.count }} Total Calls</span>
+                </div>
+                <div class="divide-y divide-white/5">
+                    {% for log in logs %}
+                    <div class="p-6 hover:bg-white/[0.02] transition-colors">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <span class="text-xs text-slate-500 font-mono mb-2 block uppercase tracking-tighter">{{ log.timestamp|date:"H:i:s.u" }}</span>
+                                <h4 class="text-lg font-bold text-amber-500 tracking-tight">{{ log.tool_name }}</h4>
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="bg-slate-900/80 p-3 rounded-xl border border-white/5">
+                                        <span class="text-[8px] text-slate-600 font-bold uppercase tracking-widest mb-1 block">Input Request</span>
+                                        <pre class="text-[10px] text-slate-400 font-mono overflow-x-auto whitespace-pre-wrap">{{ log.input_data }}</pre>
+                                    </div>
+                                    <div class="bg-indigo-950/20 p-3 rounded-xl border border-white/5">
+                                        <span class="text-[8px] text-indigo-400 font-bold uppercase tracking-widest mb-1 block">Output Result</span>
+                                        <div class="text-[10px] text-slate-200 font-mono line-clamp-4">{{ log.output_data }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-6 text-right">
+                                <span class="text-[10px] bg-slate-800 px-2 py-1 rounded text-slate-400 font-bold tracking-widest border border-white/5">{{ log.latency_ms }}ms</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="p-10 text-center text-slate-600 italic">No tool calls recorded in this session.</div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
